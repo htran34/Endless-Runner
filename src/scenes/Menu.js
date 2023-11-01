@@ -5,8 +5,8 @@ class Menu extends Phaser.Scene {
 
     preload() {
         // load audio
-        this.load.audio('sfx_mario', './assets/marioJump.wav');
         this.load.image('titleBox', './assets/menuTitle.png');
+        this.load.audio('jump', './assets/marioJump.wav');
         //this.load.bitmapFont('atari', 'assets/fonts/atari-smooth.png', 'assets/fonts/atari-smooth.xml');
     }
 
@@ -29,11 +29,7 @@ class Menu extends Phaser.Scene {
     }
     update() {
         if (Phaser.Input.Keyboard.JustDown(keySpace)) {
-            game.settings = {
-                //spaceshipSpeed: 3,
-                //spacejetSpeed: 5,
-                
-            }
+            game.settings = {}
             //this.sound.play('sfx_select');
             /* Play Mario menu button sound here! */
             this.scene.start('playScene2');    
