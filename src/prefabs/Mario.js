@@ -5,10 +5,11 @@ class Mario extends Phaser.GameObjects.Sprite {
         
         // add object to existing scene
         scene.add.existing(this);
-        this.canJump = true;
-        this.isJumping = false;
-        this.initialPosY = null;
+        // set Mario's properties
         this.moveSpeed = 2;
+        this.setGravityY(100);
+
+        
         this.sfxMario = scene.sound.add('sfx_mario'); // add Mario sfx
     }
 
