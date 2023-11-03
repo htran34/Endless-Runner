@@ -1,10 +1,8 @@
 // p1HighScore = 0;
-let gameover = false;
-let onPlatform = false;
 
 class Play extends Phaser.Scene {
     constructor() {
-        super("playScene2");
+        super("playScene1");
     }
 
     preload() {
@@ -33,62 +31,37 @@ class Play extends Phaser.Scene {
         this.add.image(320, 240, 'background');
 
         // create Mario player sprite
-        this.player = this.physics.add.image(0, 371, 'mario');
+        this.player = this.physics.add.sprite(0, 371, 'mario');
         this.player.setGravityY(500);
 
         // // adding ground 
         // // // source: https://phasergames.com/how-to-jump-in-phaser-3/#google_vignette
         this.ground = this.physics.add.sprite(320, 409, "block").setVisible(false);
         this.ground.displayWidth = 640 * 1.5;
-        this.ground.setImmovable();
 
         // adding hitboxes for pipe & boxes
-        this.pipe = this.physics.add.image(550, 359, 'pipe').setVisible(false);
-        this.box1 = this.physics.add.image(115, 270, 'box1').setVisible(false);
-        this.box2 = this.physics.add.image(325, 270, 'box2').setVisible(false);
-        this.box3 = this.physics.add.image(324, 132, 'box3').setVisible(false);
+        this.pipe = this.physics.add.sprite(550, 359, 'pipe').setVisible(false);
+        this.box1 = this.physics.add.sprite(115, 270, 'box1').setVisible(false);
+        this.box2 = this.physics.add.sprite(325, 270, 'box2').setVisible(false);
+        this.box3 = this.physics.add.sprite(324, 132, 'box3').setVisible(false);
+        let objects = [this.ground, this.pipe, this.box1, this.box2, this.box3]
 
-        // adding collisions
-        this.physics.add.collider(this.player, this.ground);
-        this.physics.add.collider(
-            this.player,
-            this.pipe,
-            (player, pipe) =>
-            {
-                if (player.body.touching.right && pipe.body.touching.left)
-                {
-                    gameover = true;
-                }
-         }); 
-         this.physics.add.collider(
-            this.player,
-            this.box2,
-            (player, box) =>
-            {
-                if (player.body.touching.bottom && box.body.touching.top)
-                {
-                    onPlatform = true;
-                }
-         }); 
+        // adding collisions 
+        for (let i = 0; i < objects.length; i++) {
+            objects[i].setImmovable();
+            this.physics.add.collider(this.player, objects[i]); 
+        }
     }
 
     update() {
-        // lets player jump onto platforms and stay there 
-        // until they fall off the edge
-        if (onPlatform == true) {
-            this.player.setGravityY(0);
-        }
-        else {
-            this.player.setGravityY(500);
+        // detect player collisions with objects from the side
+        if (this.player.body.touching.right) {
+            this.gameOver();
         }
 
         // moves Mario across the screen when unobstructed
-        if ((this.player.x < 640 ) && (gameover == false)) {
-            this.player.setVelocityX(200);
-        }
-        else if (gameover == true) {
-            this.player.setVelocityX(0);
-            this.player.setVisible(false);
+        if (this.player.x < 640 ) {
+            this.player.setVelocityX(80);
         }
 
         // jump movement (on spacekey pressed)
@@ -96,19 +69,17 @@ class Play extends Phaser.Scene {
         if (keySpace.isDown) {
             this.jump();
         }
-        else {
-            this.player.setVelocityY(0);
-        }
     }
 
     jump() {
-        if (this.player.y > 230) {
-            this.player.setGravityY(0);
-            this.player.setVelocityY(-50);
+        if (this.player.body.onFloor()) {
+            this.player.setVelocityY(-500);
         }
-        else {
-            this.player.setGravityY(500);
-            this.player.setVelocityY(0);
-        }
+    }
+
+    gameOver() {
+        this.player.setVelocityX(0);
+        this.player.setVelocityY(0);
+        this.player.setVisible(false);
     }
 }

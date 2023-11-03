@@ -21,8 +21,8 @@ class Menu extends Phaser.Scene {
         // display various menu elements
         this.add.rectangle(200, 0, 1000, 1000, 0x63a0fd);   // sets menu background color 
         this.add.image(320, 100, 'titleBox');               
-        this.add.text(150, 300, 'PRESS SPACE TO START', menuConfig);
-        this.add.text(150, 350, 'PRESS SPACE TO JUMP', menuConfig);
+        this.add.text(150, 300, 'PRESS SPACE TO START, JUMP, OR RESTART', menuConfig);
+        this.scene.restart();
 
         // define keys
         keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
@@ -32,7 +32,7 @@ class Menu extends Phaser.Scene {
             game.settings = {}
             //this.sound.play('sfx_select');
             /* Play Mario menu button sound here! */
-            this.scene.start('playScene2');    
+            this.scene.start('playScene1');    
           }
     }
 }
