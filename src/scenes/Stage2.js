@@ -6,7 +6,7 @@ class Stage2 extends Phaser.Scene {
     preload() {
         // load images/tile sprites
         this.load.image('mario', './assets/mario.png');
-        this.load.image('background', './assets/scene1.png');
+        this.load.image('background', './assets/scene0.png');
         this.load.image('pipe', './assets/pipeHitbox.png');
         this.load.image('box1', './assets/box1Hitbox.png');
         this.load.image('box2', './assets/box2Hitbox.png');
@@ -45,11 +45,11 @@ class Stage2 extends Phaser.Scene {
         this.ground.displayWidth = 640 * 1.5;
 
         // adding hitboxes for pipe & boxes
-        this.pipe = this.physics.add.sprite(550, 359, 'pipe').setVisible(false);
-        this.box1 = this.physics.add.sprite(115, 270, 'box1').setVisible(false);
-        this.box2 = this.physics.add.sprite(325, 270, 'box2').setVisible(false);
-        this.box3 = this.physics.add.sprite(324, 132, 'box3').setVisible(false);
-        let objects = [this.ground, this.pipe, this.box1, this.box2, this.box3]
+        this.pipe = this.physics.add.sprite(generateRandom(250, 600), 357, 'pipe').setVisible(true);
+        this.box1 = this.physics.add.sprite(generateRandom(0  , 640), 270, 'box1').setVisible(true);
+        // this.box2 = this.physics.add.sprite(325, 270, 'box2').setVisible(true);
+        // this.box3 = this.physics.add.sprite(324, 132, 'box3').setVisible(true);
+        let objects = [this.ground, this.pipe, this.box1]
 
         // adding collisions 
         for (let i = 0; i < objects.length; i++) {

@@ -1,3 +1,9 @@
+// function found from source: 
+// // https://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript
+function generateRandom(min, max) { // min and max included 
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
 class Stage1 extends Phaser.Scene {
     constructor() {
         super("playScene1");
@@ -6,7 +12,7 @@ class Stage1 extends Phaser.Scene {
     preload() {
         // load images/tile sprites
         this.load.image('mario', './assets/mario.png');
-        this.load.image('background', './assets/scene1.png');
+        this.load.image('background', './assets/scene0.png');
         this.load.image('pipe', './assets/pipeHitbox.png');
         this.load.image('box1', './assets/box1Hitbox.png');
         this.load.image('box2', './assets/box2Hitbox.png');
@@ -45,11 +51,8 @@ class Stage1 extends Phaser.Scene {
         this.ground.displayWidth = 640 * 1.5;
 
         // adding hitboxes for pipe & boxes
-        this.pipe = this.physics.add.sprite(550, 359, 'pipe').setVisible(false);
-        this.box1 = this.physics.add.sprite(115, 270, 'box1').setVisible(false);
-        this.box2 = this.physics.add.sprite(325, 270, 'box2').setVisible(false);
-        this.box3 = this.physics.add.sprite(324, 132, 'box3').setVisible(false);
-        let objects = [this.ground, this.pipe, this.box1, this.box2, this.box3]
+        this.pipe = this.physics.add.sprite(generateRandom(250, 640), 357, 'pipe').setVisible(true);
+        let objects = [this.ground, this.pipe]
 
         // adding collisions 
         for (let i = 0; i < objects.length; i++) {
@@ -76,7 +79,6 @@ class Stage1 extends Phaser.Scene {
         // & move onto next scene once Mario completes current playscne
         if (this.player.x < 640 ) {
             this.player.setVelocityX(80);
-
         }
         else {
             this.scene.start('playScene2');
