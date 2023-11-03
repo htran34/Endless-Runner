@@ -1,8 +1,6 @@
-// p1HighScore = 0;
-
-class Play extends Phaser.Scene {
+class Stage2 extends Phaser.Scene {
     constructor() {
-        super("playScene1");
+        super("playScene2");
     }
 
     preload() {
@@ -17,6 +15,9 @@ class Play extends Phaser.Scene {
     }
 
     create() {
+        // boolean to check if game has to be restarted from a player loss
+        this.gameEnded = false;
+
         // deactivate space key capture from menu
         this.input.keyboard.removeCapture('SPACE');
 
@@ -54,18 +55,30 @@ class Play extends Phaser.Scene {
     }
 
     update() {
-        // detect player collisions with objects from the side
-        if (this.player.body.touching.right) {
+        keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+        // check if game has to be restarted from a player loss
+        // and allow player to restart with SPACE if game has ended
+        if (this.gameEnded && Phaser.Input.Keyboard.JustDown(keySpace)) {
+            this.player.setVisible(true);
+            this.scene.restart();
+        }
+
+        // detect player collisions with objects
+        if (this.player.body.touching.right || this.player.body.touching.up) {
             this.gameOver();
         }
 
-        // moves Mario across the screen when unobstructed
+        // moves Mario across the screen when within current playscene
+        // & move onto next scene once Mario completes current playscne
         if (this.player.x < 640 ) {
-            this.player.setVelocityX(80);
+            this.player.setVelocityX(150);
+        }
+        else {
+            this.scene.start('playScene2');
         }
 
         // jump movement (on spacekey pressed)
-        keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         if (keySpace.isDown) {
             this.jump();
         }
@@ -81,5 +94,6 @@ class Play extends Phaser.Scene {
         this.player.setVelocityX(0);
         this.player.setVelocityY(0);
         this.player.setVisible(false);
+        this.gameEnded = true;
     }
 }
