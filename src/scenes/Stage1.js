@@ -18,6 +18,10 @@ class Stage1 extends Phaser.Scene {
         // boolean to check if game has to be restarted from a player loss
         this.gameEnded = false;
 
+        // display score
+        this.scoreDisplay = this.add.text(50, 50, 'SCORE: ' + score);
+        this.scoreDisplay.setDepth(999);
+
         // deactivate space key capture from menu
         this.input.keyboard.removeCapture('SPACE');
 
@@ -55,10 +59,9 @@ class Stage1 extends Phaser.Scene {
     }
 
     update() {
-        keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-
         // check if game has to be restarted from a player loss
         // and allow player to restart with SPACE if game has ended
+        keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         if (this.gameEnded && Phaser.Input.Keyboard.JustDown(keySpace)) {
             this.player.setVisible(true);
             this.scene.restart();
@@ -73,6 +76,7 @@ class Stage1 extends Phaser.Scene {
         // & move onto next scene once Mario completes current playscne
         if (this.player.x < 640 ) {
             this.player.setVelocityX(80);
+
         }
         else {
             this.scene.start('playScene2');
@@ -82,11 +86,15 @@ class Stage1 extends Phaser.Scene {
         if (keySpace.isDown) {
             this.jump();
         }
+
+        // update score
+        this.scoreDisplay.text = 'SCORE: ' + score;
     }
 
     jump() {
         if (this.player.body.onFloor()) {
             this.player.setVelocityY(-500);
+            score += 10;
         }
     }
 
@@ -95,5 +103,6 @@ class Stage1 extends Phaser.Scene {
         this.player.setVelocityY(0);
         this.player.setVisible(false);
         this.gameEnded = true;
+        score = 0;
     }
 }

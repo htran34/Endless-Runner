@@ -26,6 +26,9 @@ class Menu extends Phaser.Scene {
 
         // define keys
         keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+        // initialize score
+        score = 0;
     }
     update() {
         if (Phaser.Input.Keyboard.JustDown(keySpace)) {
