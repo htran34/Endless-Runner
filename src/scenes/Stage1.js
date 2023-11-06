@@ -14,10 +14,9 @@ class Stage1 extends Phaser.Scene {
         this.load.image('mario', './assets/mario.png');
         this.load.image('background', './assets/scene0.png');
         this.load.image('pipe', './assets/pipeHitbox.png');
-        this.load.image('box1', './assets/box1Hitbox.png');
-        this.load.image('box2', './assets/box2Hitbox.png');
-        this.load.image('box3', './assets/box1Hitbox.png');
         this.load.audio('music', './assets/backgroundMusic.wav');
+        this.load.audio('jump', './assets/marioJump.wav');
+        this.load.audio('running', './assets/run.wav');
     }
 
     create() {
@@ -31,12 +30,12 @@ class Stage1 extends Phaser.Scene {
         // deactivate space key capture from menu
         this.input.keyboard.removeCapture('SPACE');
 
-        // play looping background music
-        let musicConfig = {
-            volume: 2,
-            loop: true
+        // play looping background music && non-looping running
+        if (!stage6) {
+            this.music = this.sound.play('music', soundConfig);
         }
-        this.sound.play('music', musicConfig);
+        this.run = this.sound.add('running', soundConfig);
+        this.run.play();
 
         // load background image
         this.add.image(320, 240, 'background');
@@ -51,7 +50,7 @@ class Stage1 extends Phaser.Scene {
         this.ground.displayWidth = 640 * 1.5;
 
         // adding hitboxes for pipe & boxes
-        this.pipe = this.physics.add.sprite(generateRandom(250, 640), 357, 'pipe').setVisible(true);
+        this.pipe = this.physics.add.sprite(generateRandom(250, 600), 342, 'pipe').setVisible(true);
         let objects = [this.ground, this.pipe]
 
         // adding collisions 
@@ -81,6 +80,7 @@ class Stage1 extends Phaser.Scene {
             this.player.setVelocityX(80);
         }
         else {
+            this.run.stop()
             this.scene.start('playScene2');
         }
 
@@ -96,14 +96,17 @@ class Stage1 extends Phaser.Scene {
     jump() {
         if (this.player.body.onFloor()) {
             this.player.setVelocityY(-500);
+            this.sound.play('jump', {rate: 1});
             score += 10;
         }
     }
 
     gameOver() {
+        stage6 = false;
         this.player.setVelocityX(0);
         this.player.setVelocityY(0);
         this.player.setVisible(false);
+        this.game.sound.stopAll();
         this.gameEnded = true;
         score = 0;
     }

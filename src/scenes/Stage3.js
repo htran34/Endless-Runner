@@ -1,14 +1,14 @@
-class Stage2 extends Phaser.Scene {
+class Stage3 extends Phaser.Scene {
     constructor() {
-        super("playScene2");
+        super("playScene3");
     }
 
     preload() {
         // load images/tile sprites
         this.load.image('mario', './assets/mario.png');
         this.load.image('background', './assets/scene0.png');
-        this.load.image('pipe', './assets/pipeHitbox.png');
         this.load.image('box1', './assets/box1Hitbox.png');
+        this.load.image('box2', './assets/box2Hitbox.png');
         this.load.audio('music', './assets/backgroundMusic.wav');
         this.load.audio('jump', './assets/marioJump.wav');
     }
@@ -41,9 +41,9 @@ class Stage2 extends Phaser.Scene {
         this.ground.displayWidth = 640 * 1.5;
 
         // adding hitboxes for pipe & boxes
-        this.pipe = this.physics.add.sprite(generateRandom(250, 600), 341, 'pipe').setVisible(true);
-        this.box1 = this.physics.add.sprite(generateRandom(40 , 440), 270, 'box1').setVisible(true);
-        let objects = [this.ground, this.pipe, this.box1]
+        this.box1 = this.physics.add.sprite(generateRandom(200 , 250), 270, 'box1').setVisible(true);
+        this.box2 = this.physics.add.sprite(generateRandom(350 , 440), 270, 'box2').setVisible(true);
+        let objects = [this.ground, this.box1, this.box2]
 
         // adding collisions 
         for (let i = 0; i < objects.length; i++) {
@@ -70,10 +70,11 @@ class Stage2 extends Phaser.Scene {
         // & move onto next scene once Mario completes current playscne
         if (this.player.x < 640 ) {
             this.player.setVelocityX(150);
+
         }
         else {
             this.run.stop()
-            this.scene.start('playScene3');
+            this.scene.start('playScene4');
         }
 
         // jump movement (on spacekey pressed)
@@ -89,7 +90,7 @@ class Stage2 extends Phaser.Scene {
         if (this.player.body.onFloor()) {
             this.player.setVelocityY(-500);
             this.sound.play('jump');
-            score += 50;
+            score += 100;
         }
     }
 

@@ -1,6 +1,6 @@
-class Stage2 extends Phaser.Scene {
+class Stage5 extends Phaser.Scene {
     constructor() {
-        super("playScene2");
+        super("playScene5");
     }
 
     preload() {
@@ -9,8 +9,11 @@ class Stage2 extends Phaser.Scene {
         this.load.image('background', './assets/scene0.png');
         this.load.image('pipe', './assets/pipeHitbox.png');
         this.load.image('box1', './assets/box1Hitbox.png');
+        this.load.image('box2', './assets/box2Hitbox.png');
+        this.load.image('plane', './assets/plane.png');
         this.load.audio('music', './assets/backgroundMusic.wav');
         this.load.audio('jump', './assets/marioJump.wav');
+        this.load.audio('planeSound', './assets/plane.wav');
     }
 
     create() {
@@ -24,9 +27,11 @@ class Stage2 extends Phaser.Scene {
         // deactivate space key capture from menu
         this.input.keyboard.removeCapture('SPACE');
 
-        // play running sound
+        // play running & plane sound
         this.run = this.sound.add('running', soundConfig);
         this.run.play();
+        this.planeSound = this.sound.add('planeSound');
+        this.planeSound.play();
 
         // load background image
         this.add.image(320, 240, 'background');
@@ -34,16 +39,18 @@ class Stage2 extends Phaser.Scene {
         // create Mario player sprite
         this.player = this.physics.add.sprite(0, 371, 'mario');
         this.player.setGravityY(500);
-
+        
         // // adding ground 
         // // // source: https://phasergames.com/how-to-jump-in-phaser-3/#google_vignette
         this.ground = this.physics.add.sprite(320, 409, "block").setVisible(false);
         this.ground.displayWidth = 640 * 1.5;
 
         // adding hitboxes for pipe & boxes
-        this.pipe = this.physics.add.sprite(generateRandom(250, 600), 341, 'pipe').setVisible(true);
-        this.box1 = this.physics.add.sprite(generateRandom(40 , 440), 270, 'box1').setVisible(true);
-        let objects = [this.ground, this.pipe, this.box1]
+        this.pipe = this.physics.add.sprite(300, 341, 'pipe').setVisible(true);
+        this.box1 = this.physics.add.sprite(generateRandom(200 , 250), 270, 'box1').setVisible(true);
+        this.box2 = this.physics.add.sprite(560, 270, 'box2').setVisible(true);
+        this.plane = this.physics.add.sprite(500, 120, 'plane');
+        let objects = [this.ground, this.pipe, this.box1, this.box2, this.plane]
 
         // adding collisions 
         for (let i = 0; i < objects.length; i++) {
@@ -70,10 +77,14 @@ class Stage2 extends Phaser.Scene {
         // & move onto next scene once Mario completes current playscne
         if (this.player.x < 640 ) {
             this.player.setVelocityX(150);
+            this.plane.setVelocityX(-30);
+
         }
         else {
-            this.run.stop()
-            this.scene.start('playScene3');
+            stage6 = true;
+            this.planeSound.stop();
+            this.run.stop();
+            this.scene.start('playScene1');
         }
 
         // jump movement (on spacekey pressed)
@@ -89,7 +100,7 @@ class Stage2 extends Phaser.Scene {
         if (this.player.body.onFloor()) {
             this.player.setVelocityY(-500);
             this.sound.play('jump');
-            score += 50;
+            score += 100;
         }
     }
 
@@ -97,6 +108,7 @@ class Stage2 extends Phaser.Scene {
         stage6 = false;
         this.player.setVelocityX(0);
         this.player.setVelocityY(0);
+        this.plane.setVelocityX(0);
         this.player.setVisible(false);
         this.game.sound.stopAll();
         this.gameEnded = true;

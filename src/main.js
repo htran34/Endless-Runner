@@ -10,10 +10,15 @@ let config = {
           debug: false
       }
     },
-    scene: [ Menu, Stage1, Stage2 ]
+    scene: [ Menu, Stage1, Stage2, Stage3, Stage4, Stage5]
 };
 
 let game = new Phaser.Game(config);
 
 // reserve keyboard vars
 let keySpace, score;
+let stage6 = false;
+let soundConfig = {
+  volume: 2,
+  loop: true
+}
