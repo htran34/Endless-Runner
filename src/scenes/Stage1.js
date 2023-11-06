@@ -17,6 +17,7 @@ class Stage1 extends Phaser.Scene {
         this.load.audio('music', './assets/backgroundMusic.wav');
         this.load.audio('jump', './assets/marioJump.wav');
         this.load.audio('running', './assets/run.wav');
+        // this.game.load.atlas('mario2', 'assets/spritesheet.png', 'assets/sprites.json');
     }
 
     create() {
@@ -43,6 +44,12 @@ class Stage1 extends Phaser.Scene {
         // create Mario player sprite
         this.player = this.physics.add.sprite(0, 371, 'mario');
         this.player.setGravityY(500);
+        // this.player.animations.add(
+        //     'mariojump-modified (1)',
+        //     Phaser.Animation.generateFrameNames('mariojump-modified (1)', 1, 2),
+        //     5,
+        //     true
+        // );
 
         // // adding ground 
         // // // source: https://phasergames.com/how-to-jump-in-phaser-3/#google_vignette
@@ -97,6 +104,7 @@ class Stage1 extends Phaser.Scene {
         if (this.player.body.onFloor()) {
             this.player.setVelocityY(-500);
             this.sound.play('jump', {rate: 1});
+            // this.player.animations.play('dying');
             score += 10;
         }
     }

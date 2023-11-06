@@ -1,10 +1,9 @@
-class Menu extends Phaser.Scene {
+class Menu2 extends Phaser.Scene {
     constructor() {
-        super("menuScene");
+        super("menuScene2");
     }
 
     preload() {
-        this.load.image('titleBox', './assets/menuTitle.png');
         this.load.audio('start', './assets/gameStart.wav');
     }
 
@@ -18,9 +17,11 @@ class Menu extends Phaser.Scene {
 
         // display various menu elements
         this.add.rectangle(200, 0, 1000, 1000, 0x63a0fd);   // sets menu background color 
-        this.title = this.add.image(320, 100, 'titleBox');               
-        this.add.text(150, 300, 'PRESS SPACE TO', menuConfig);
-        this.add.text(150, 350, 'START, JUMP, OR RESTART', menuConfig);
+        this.add.image(320, 100, 'titleBox');               
+        this.add.text(50, 200, 'CREDITS', menuConfig);
+        this.add.text(50, 250, 'MUSIC: ultragamemusic on YT', menuConfig);
+        this.add.text(50, 300, 'Mario character & music all', menuConfig);
+        this.add.text(50, 350, 'originally created by Nintendo Co.', menuConfig);
 
         // define keys
         keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
@@ -31,9 +32,8 @@ class Menu extends Phaser.Scene {
     update() {
         if (Phaser.Input.Keyboard.JustDown(keySpace)) {
             game.settings = {}
-            this.title.destroy();
             this.sound.play('start');
-            this.scene.start('menuScene2');    
+            this.scene.start('playScene1');    
           }
     }
 }
